@@ -1,0 +1,16 @@
+#
+# Edit Lock-Stake file. CAUTION: Please do not change.
+#
+# Information about current Edit Lock Owner.
+#
+LockStakeVersion               1.1
+LoginName                      manna96
+HostName                       ea72.eecs.yorku.ca
+ProcessIdentifier              31103
+ProcessCreationTime_UTC        1616454210
+ProcessCreationTime_Readable   Mon Mar 22 19:03:30 2021 EDT
+AppIdentifier                  OA File System Design Manager
+OSType                         unix
+ReasonForPlacingEditLock       OpenAccess edit lock
+FilePathUsedToEditLock         /eecs/home/manna96/IC_CAD/cadence/proj2/equal_0/schematic/sch.oa.cdslck
+TimeEditLocked                 Mon Mar 22 19:36:19 2021 EDT
