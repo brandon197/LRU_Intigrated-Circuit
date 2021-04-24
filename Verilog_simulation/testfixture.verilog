@@ -1,0 +1,74 @@
+logic [16:0] vectors[20:0], currentvec;
+logic [5:0] vectornum, errors;
+logic testbench_clk;
+
+	initial begin
+		$readmemb("lru.tv", vectors); // put your test vectors into the vectors variable
+		vectornum = 0; errors = 0;
+
+	end
+
+	always begin
+		testbench_clk = 0; #1; testbench_clk = 1; #16; testbench_clk = 0; #16;
+	end
+
+
+  always
+    begin
+     clk <= 0; clk2 <= 0; #1; 
+     clk <= 1; # 4; 
+     clk <= 0; #2; 
+     clk2 <= 1; # 4;
+    end
+
+	always @(posedge testbench_clk) begin
+		currentvec = vectors[vectornum];
+		reset = currentvec[10];	
+
+	if (rdy_o === 1'b1)
+	begin
+		val_i = 1;
+		rdy_i = 0;
+		set_index = currentvec[16:14];
+		cache_hit_index = currentvec[13:12];
+		h_m = currentvec[11];
+	end
+	else
+	begin
+	 val_i = 1'b0;
+	end		
+	
+		if (currentvec[10] === 1'bx) begin // if the output is unknown (x), you have finished the test
+         		$display("Completed %d tests with %d errors.", 
+                  		vectornum, errors);
+        		 $stop;
+       		end
+    	end
+
+
+	always @(negedge testbench_clk) begin
+
+	if(val_o === 1'b1)
+	begin
+
+		rdy_i = 1;
+		val_i = 0;
+
+		if((outputdata !== currentvec[9:2] && wayindex !== currentvec[1:0]))begin
+			$display("Error: inputs were set_index=%b", currentvec[16:14]);
+          		$display("       updated_counters = %b wayindex =%b (%b %b expected)", 
+                   		outputdata, wayindex,currentvec[9:2], currentvec[1:0]);
+          		errors = errors + 1;
+       		end
+
+       		vectornum = vectornum + 1;
+	end
+	else
+	begin
+		rdy_i = 0;
+	end
+	
+	if(vectornum === 6'b000000) vectornum = vectornum +1;
+
+    	end
+		
